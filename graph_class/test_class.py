@@ -12,6 +12,7 @@ class Graph_exception(Exception):
     def __str__(self):
         return self.message
     
+    
 
 class Graph:
     def __init__(self, adj_mtx=None, inc_mtx=None, adj_lst=None):
