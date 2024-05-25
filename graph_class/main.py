@@ -2,6 +2,7 @@ from test_class import Graph
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
+
 def generate_random_graph(num_vertices, edge_chance, directed=False, weighted=False):
     """Generates a random Graph object.
 
@@ -14,6 +15,8 @@ def generate_random_graph(num_vertices, edge_chance, directed=False, weighted=Fa
     Returns:
         Graph: A randomly generated Graph object.
     """
+    seed = 21
+    random.seed(seed)
     graph = nx.Graph() if not directed else nx.DiGraph()
     for i in range(num_vertices):
         graph.add_node(i)
@@ -28,8 +31,16 @@ def generate_random_graph(num_vertices, edge_chance, directed=False, weighted=Fa
                     graph.add_edge(i, j)
 
     # Convert to your Graph class
-    adj_dict = {node: list(graph.neighbors(node)) for node in graph.nodes()}
-    my_graph = Graph(adj_lst=list(adj_dict.values()))
+    adj_list = []
+    for i in range(num_vertices):
+        for j in range(i + 1 if not directed else num_vertices):
+            if i != j and (i, j) in graph.edges():  # Check if edge exists
+                if weighted:
+                    adj_list.append([i, j, graph.edges[i, j]['weight']])  # Add weight
+                else:
+                    adj_list.append([i, j])
+
+    my_graph = Graph(adj_lst=adj_list)
     my_graph._type_direction = "oriented" if directed else "unoriented"
     my_graph._type_weight = "weighted" if weighted else "unweighted"
 
@@ -48,9 +59,9 @@ if __name__ == "__main__":
     #     [4,3],
     # ])
     
-    b = generate_random_graph(10, 0.5, directed=True, weighted=False)
-    print(b)
-    b.plot_graph()
-
+    b = generate_random_graph(15, 0.15, directed=False, weighted=False)
     
+    b.plot_graph()
+    print(b.bfs_shortest_unoriented_path(2,12))
+
     

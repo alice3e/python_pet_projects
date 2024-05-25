@@ -1,6 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-
+from numpy import inf
 
 class Graph_exception(Exception):
     def __init__(self, *args):
@@ -108,8 +108,10 @@ class Graph:
         # Set layout for the graph (adjust as needed)
         if self._type_direction == "unoriented":
             pos = nx.spring_layout(graph) # Spring layout for unoriented graphs
+            #print("spring layout")
         else:
             pos = nx.shell_layout(graph)  # Shell layout for oriented graphs 
+            #print("shell layout")
 
         # Draw the graph
         nx.draw(graph, pos, with_labels=True, node_size=700, node_color="skyblue", font_size=10, font_weight="bold")
@@ -122,5 +124,32 @@ class Graph:
         plt.title("Graph Visualization")
         plt.show()
         
-    def bfs(self,start_ind, end_ind):
+    def get_neighbors(self, vertex_ind):
+        neighbors_list = []
+        if self._adjacency_mtx != []:
+            if(vertex_ind >= len(self._adjacency_mtx)): raise Graph_exception("vertex index error")
+            for i in range(len(self._adjacency_mtx)):
+                if self._adjacency_mtx[vertex_ind][i] != 0:
+                    neighbors_list.append(i)
+        return neighbors_list
         
+    def bfs_shortest_unoriented_path(self,start_ind, end_ind) -> int:
+        if self._type_direction == "oriented": raise Graph_exception
+        
+        queue = []
+        visited = {i:inf for i in range(len(self._adjacency_mtx))}
+        
+        visited[start_ind] = 0
+        queue.append(start_ind)
+        
+        while queue:
+            node = queue.pop(0)
+            if(node == end_ind):
+                return visited[node]
+            for i in self.get_neighbors(node): 
+                if  visited[i] == inf: 
+                    queue.append(i)
+                    visited[i] = visited[node] + 1
+        return -1
+    
+    def dfs_shortest_unoriented_path(self,start_ind, end_ind) -> int:
