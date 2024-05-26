@@ -9,3 +9,7 @@ _algorithms created_: dfs (undirected)
 
 _task_: write almost all popular sorting algorithms and benchmark them.
 _algorithms created_: 
+
+## all basic data structures as classes (`standart_containers_lib`)
+
+_task_: write almost all popular data structures like linked list, hash table, binary tree and etc. 
