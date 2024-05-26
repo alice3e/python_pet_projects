@@ -3,7 +3,7 @@ import random
 import random
 
 def quick_sort(arr: list, size : int) -> list:
-    """_summary_
+    """Quick sort using list comprehension
 
     Args:
         arr (list): unsorted list

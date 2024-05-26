@@ -3,6 +3,7 @@ def bubble_sort(arr: list, size: int) -> list:
     
     Args:
         arr (list): unsorted list
+        size (int): size of a list
 
     Returns:
         list: sorted list
