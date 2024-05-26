@@ -60,7 +60,7 @@ def benchmark_all_list_types(sorting_function, size, max_abs_value, negative_val
         input_list = generate_random_list(size, max_abs_value, negative_values, type=list_type, seed=seed)
         # Make a copy of the input list
         test_list = input_list.copy()
-        sorting_function(test_list)
+        test_list = sorting_function(test_list, size=len(test_list))
         end_time = time.time()
         times.append(end_time - start_time)
 

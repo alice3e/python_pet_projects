@@ -1,4 +1,4 @@
-def bubble_sort(arr: list) -> list:
+def bubble_sort(arr: list, size: int) -> list:
     """Bubble sort
     
     Args:
@@ -14,7 +14,7 @@ def bubble_sort(arr: list) -> list:
         list type: reversed_sorted, time taken: 2.562087059020996
         list type: almost_sorted, time taken: 1.2984519004821777
     """
-    n = len(arr)
+    n = size
     for i in range(0,n-1):
         for j in range(0,n-1-i):
             if(arr[j] > arr[j+1]):
