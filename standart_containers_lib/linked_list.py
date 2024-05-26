@@ -1,4 +1,24 @@
 class Node:
+    """
+    A singly linked list implementation to store key-value pairs for handling collisions in a hash table.
+
+    Attributes:
+        head (Node): The head node of the linked list.
+
+    Methods:
+        __init__():
+            Initializes an empty linked list.
+        insert(key, value):
+            Inserts a new key-value pair at the end of the linked list.
+        find(key):
+            Finds the value associated with the given key in the linked list. Returns None if the key is not found.
+        delete(key):
+            Deletes the node with the given key from the linked list. Returns True if the deletion is successful, False otherwise.
+        update(key, value):
+            Updates the value of the node with the given key in the linked list. Returns True if the update is successful, False otherwise.
+        __iter__():
+            Returns an iterator over the key-value pairs in the linked list.
+    """
     def __init__(self, key, value):
         self.key = key
         self.value = value
