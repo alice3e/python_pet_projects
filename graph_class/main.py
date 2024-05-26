@@ -60,8 +60,8 @@ if __name__ == "__main__":
     # ])
     
     b = generate_random_graph(15, 0.15, directed=False, weighted=False)
+    c = generate_random_graph(10, 0.15, directed=False, weighted=False)
     
     b.plot_graph()
-    print(b.bfs_shortest_unoriented_path(2,12))
-
+    c.plot_graph()
     

@@ -15,6 +15,13 @@ class Graph_exception(Exception):
     
 
 class Graph:
+    
+    __type_direction = ""
+    __type_weight = ""
+    __adjacency_dict = dict()
+    __adjacency_mtx = [[]]
+    __incidence_mtx = [[]]
+    
     def __init__(self, adj_mtx=None, inc_mtx=None, adj_lst=None):
         """Initializes a Graph object.
 
@@ -34,11 +41,11 @@ class Graph:
 
         If no input is provided, an empty graph is created.
         """
-        self._type_direction = "unoriented"
-        self._type_weight = "unweighted"
-        self._adjacency_dict = self._convert_to_dict(adj_lst) if adj_lst is not None else {}
-        self._adjacency_mtx = adj_mtx if adj_mtx is not None else self.adj_lst_to_adj_mtx()
-        self._incidence_mtx = inc_mtx if inc_mtx is not None else [[]]
+        self.__type_direction = "unoriented"
+        self.__type_weight = "unweighted"
+        self.__adjacency_dict = self._convert_to_dict(adj_lst) if adj_lst is not None else {}
+        self.__adjacency_mtx = adj_mtx if adj_mtx is not None else self.adj_lst_to_adj_mtx()
+        self.__incidence_mtx = inc_mtx if inc_mtx is not None else [[]]
 
         
     def __str__(self):
@@ -55,12 +62,12 @@ class Graph:
     
     def adj_mtx_to_adj_lst(self):
         """Converts the adjacency matrix to an adjacency list."""
-        num_vertices = len(self._adjacency_mtx) 
+        num_vertices = len(self.__adjacency_mtx) 
         adj_list = [[] for _ in range(num_vertices)] 
 
         for i in range(num_vertices):
             for j in range(num_vertices):
-                if self._adjacency_mtx[i][j] == 1:  # Assuming unweighted graph (1 for edge)
+                if self.__adjacency_mtx[i][j] == 1:  # Assuming unweighted graph (1 for edge)
                     adj_list[i].append(j)
         return adj_list
         
@@ -70,15 +77,15 @@ class Graph:
             # Find the maximum vertex number to determine the matrix size
             # Find the maximum vertex number to determine the matrix size
             max_vertex = 0
-            for vertex, neighbors in self._adjacency_dict.items():
+            for vertex, neighbors in self.__adjacency_dict.items():
                 max_vertex = max(max_vertex, vertex, *(neighbors if neighbors else [vertex])) 
 
             num_vertices = max_vertex + 1  # Add 1 to account for zero-based indexing
             adj_matrix = [[0] * num_vertices for _ in range(num_vertices)]
             
-            for id, edge in self._adjacency_dict.items():
+            for id, edge in self.__adjacency_dict.items():
                 v_from, v_to = edge[0],edge[1]
-                if(self._type_direction == "unoriented"):
+                if(self.__type_direction == "unoriented"):
                     adj_matrix[v_from][v_to] = 1
                     adj_matrix[v_to][v_from] = 1
                 else:
@@ -100,14 +107,14 @@ class Graph:
         for i in range(num_vertices):
             for j in range(num_vertices):
                 if adj_matrix[i][j] != 0:  # An edge exists
-                    if self._type_weight == "unweighted":
+                    if self.__type_weight == "unweighted":
                         graph.add_edge(i, j)
                     else:
                         weight = adj_matrix[i][j] 
                         graph.add_edge(i, j, weight=weight)
 
         # Set layout for the graph (adjust as needed)
-        if self._type_direction == "unoriented":
+        if self.__type_direction == "unoriented":
             pos = nx.spring_layout(graph) # Spring layout for unoriented graphs
             #print("spring layout")
         else:
@@ -118,7 +125,7 @@ class Graph:
         nx.draw(graph, pos, with_labels=True, node_size=700, node_color="skyblue", font_size=10, font_weight="bold")
 
         # Draw edge labels (for weighted graphs)
-        if self._type_weight == "weighted":
+        if self.__type_weight == "weighted":
             labels = nx.get_edge_attributes(graph, 'weight')
             nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels)
 
@@ -127,18 +134,19 @@ class Graph:
         
     def get_neighbors(self, vertex_ind):
         neighbors_list = []
-        if self._adjacency_mtx != []:
-            if(vertex_ind >= len(self._adjacency_mtx)): raise Graph_exception("vertex index error")
-            for i in range(len(self._adjacency_mtx)):
-                if self._adjacency_mtx[vertex_ind][i] != 0:
+        if self.__adjacency_mtx != []:
+            if(vertex_ind >= len(self.__adjacency_mtx)): raise Graph_exception("vertex index error")
+            for i in range(len(self.__adjacency_mtx)):
+                if self.__adjacency_mtx[vertex_ind][i] != 0:
                     neighbors_list.append(i)
         return neighbors_list
         
     def bfs_shortest_unoriented_path(self,start_ind, end_ind) -> int:
-        if self._type_direction == "oriented": raise Graph_exception
+        print(f'a = {self.a}')
+        if self.__type_direction == "oriented": raise Graph_exception
         
         queue = []
-        visited = {i:inf for i in range(len(self._adjacency_mtx))}
+        visited = {i:inf for i in range(len(self.__adjacency_mtx))}
         
         visited[start_ind] = 0
         queue.append(start_ind)
@@ -154,3 +162,7 @@ class Graph:
         return -1
     
     def dfs_shortest_unoriented_path(self,start_ind, end_ind) -> int:
+        pass
+    
+    def print_a(self):
+        print(self.__a)
