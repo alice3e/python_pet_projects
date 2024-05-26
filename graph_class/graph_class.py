@@ -176,6 +176,8 @@ class Graph:
         return neighbors_list
     
     def get_distance_between_nodes(self, start_ind, end_ind):
+        if(self.__type_weight != "weighted"):
+            return 1
         if(len(self.__adjacency_mtx) != 0 ):
             return self.__adjacency_mtx[start_ind][end_ind]
         else:
@@ -202,27 +204,34 @@ class Graph:
         return -1
     
     def dijkstra_shortest_oriented_path(self,start_ind) -> list:
-        """Dijkstra's algorithm
+        """
+        Implements Dijkstra's algorithm with priority queue to find the shortest path from a starting node to all other nodes in an oriented, weighted graph.
 
         Args:
-            start_ind (_type_): node from where to start
+            start_ind (int): The index of the starting node.
+
         Returns:
-            list: distance to all nodes
+            list: A list where the value at each index represents the shortest distance from the start node to the node at that index. If a node is unreachable, the distance will be set to infinity.
         """
         shortest_path = [inf for i in range(self.__number_of_nodes)]
-        is_shortest = set()
         queue = []
         heapq.heapify(queue)
         
-        
         shortest_path[start_ind] = 0
-        is_shortest.add(start_ind)
-        for node_id in self.get_neighbors(start_ind):
-            dist = self.get_distance_between_nodes(start_ind,node_id)
-            heapq.heappush(queue, (dist,node_id)   )
+        heapq.heappush(queue, (0,start_ind))
         
         while queue:
-            print(queue)
+            distance_to_previous, current_node_id = heapq.heappop(queue)
             
-    
+            if(distance_to_previous > shortest_path[current_node_id]):
+                continue
+            
+            for neighbor_node_id in self.get_neighbors(current_node_id):
+                dist = self.get_distance_between_nodes(current_node_id,neighbor_node_id) + distance_to_previous
+                if(dist < shortest_path[neighbor_node_id]):
+                    shortest_path[neighbor_node_id] = dist
+                    heapq.heappush(queue, (dist, neighbor_node_id))
+        return shortest_path
+            
+            
     
