@@ -40,24 +40,33 @@ def generate_random_list(size=10,max_abs_value=20,negative_values=True,type="ran
         raise Exception("wrong type in generate_random_list")
     
 
-def benchmark_all_list_types(sorting_function, size: int, max_abs_value: int, negative_values: bool,seed: int):
-    """Benchmarks the given sorting function on different list types.
+def benchmark_all_list_types(sorting_function, size, max_abs_value, negative_values, seed):
+    """Benchmarks the given sorting function on different list types,
+    raising an exception if the output is not truly sorted.
 
     Args:
         sorting_function (function): The sorting function to benchmark (e.g., sorted, list.sort).
         size (int): The desired size of the lists.
         max_abs_value (int): The maximum absolute value of elements in the lists.
         negative_values (bool): Whether to include negative values in the lists.
-        seed(int): seed for random().
+        seed (int): Seed for random number generation.
+
     Returns:
         list: A list of times (in seconds) taken to sort each list type.
     """
     times = []
     for list_type in ["random", "sorted", "reversed_sorted", "almost_sorted"]:
         start_time = time.time()
-        input_list = generate_random_list(size, max_abs_value, negative_values, type=list_type,seed=seed)
-        sorting_function(input_list)
+        input_list = generate_random_list(size, max_abs_value, negative_values, type=list_type, seed=seed)
+        # Make a copy of the input list
+        test_list = input_list.copy()
+        sorting_function(test_list)
         end_time = time.time()
         times.append(end_time - start_time)
+
+        # Check if the list is truly sorted
+        if not all(test_list[i] <= test_list[i + 1] for i in range(len(test_list) - 1)):
+            raise Exception(f"Sorting function failed to sort correctly for list type: {list_type}")
+
     return times
 
